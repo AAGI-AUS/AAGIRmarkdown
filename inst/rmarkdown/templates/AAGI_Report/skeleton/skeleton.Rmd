@@ -1,0 +1,228 @@
+---
+# Report details
+report-title: "Informative title for report"
+project-code: "GRDC/AAGI Project Code"
+program: "AAGI Program"  # e.g., Service & Support, Research & Development
+university: "University Name"
+aagi-node: "AAGI-XX"
+author:
+  - "**Your Name**"
+  - "Name 2"
+  - "Name 3"
+client:
+  - "**Client Name (Client Organisation)**"
+  - "Name 2 (Organisation 2)"
+correspondence-email: "your.email@example.edu.au"
+report-date: "`r format(Sys.time(), '%B %e, %Y')`"
+
+# LaTeX options (modify as necessary)
+bibliography: references.bib
+csl: assets/biometrics.csl
+header-includes:
+  - \usepackage{lipsum}
+
+# MS Word options (TODO: do we need anything here? Actually, this seems
+# to be harder than expected...)
+
+# Report output options  
+output:
+  pdf_document:
+    latex_engine: pdflatex
+    keep_tex: true
+    template: assets/aagi_report_template.tex
+---
+
+```{r document_options}
+#| include=FALSE, message=FALSE, warning=FALSE
+library(rmarkdown)
+library(formatR)
+library(kableExtra)
+knitr::opts_chunk$set(
+  fig.path = "figure/Rplots-",
+  fig.align = "center",
+  fig.show = "hold",
+  comment = NA,
+  background = "white",
+  highlight = FALSE,
+  tidy = TRUE,
+  tidy.opts = list(width.cutoff = 60),
+  size = "small",
+  prompt = TRUE
+)
+
+aagi_table <- function(...) {
+  args <- list(...)
+  knitr::kable(..., format = "latex") |>
+    kableExtra::kable_styling(
+      full_width = FALSE,
+      latex_options = c("HOLD_position")
+    ) |>
+    kableExtra::row_spec(0, background = "#00808b", color = "#ffffff") |>
+    kableExtra::column_spec(1, border_left = TRUE) |>
+    kableExtra::column_spec(ncol(args[[1]]), border_right = TRUE)
+}
+```
+
+\clearpage
+\phantomsection
+# Executive Summary {-}
+
+Executive summary goes here. Summarise the work that was provided by AAGI and
+the main results. (Try to limit this to a single page.)
+
+
+\pagestyle{fancy}
+\clearpage
+# Introduction
+
+The report body text goes here.
+
+Note that the following section titles are provided as a guide, but feel free
+to modify them in any way that you like if they are not relevant to your work
+of if using a different set of titles enhances the readability of your report.
+
+Use AAGI theme colours for emphasis:
+
+- Use \verb|\textcolor{aagiteal}{...}| for \textcolor{aagiteal}{AAGI teal},
+- Use \verb|\textcolor{aagigreen}{...}| for \textcolor{aagigreen}{AAGI green},
+- Use \verb|\textcolor{aagiblack}{...}| for \textcolor{aagiblack}{AAGI black}.
+
+Use \verb|[@blah]| for parenthetical citations: [@blah]. Use \verb|@blah|
+for text citations, e.g. @blah. References should be entered in bibtex
+format in the \texttt{references.bib} file.
+
+You can use \verb|\begin{note} ... \end{note}|
+for emphatic notes throughout the report if you like. You can use
+\verb|\faIcon{...}| to add FontAwesome icons for decoration, as shown below.
+
+\begin{note}
+  {\sbf\color{aagiteal!75!black} \faIcon{exclamation-triangle} NOTE}\quad
+  This is an example of a note.
+\end{note}
+
+Use code chunks to embed R code and analytics results:
+
+```{r mycodechunk}
+#| echo=TRUE, eval=TRUE
+1 + 2
+```
+
+You can use the \texttt{AAGIThemes} package to give a consistent style to
+your charts and graphics:
+
+```{r mygraph}
+#| echo=FALSE, message=FALSE, warning=FALSE,
+#| fig.height=3, fig.width=6, fig.pos="H",
+#| fig.cap="My figure"
+library(ggplot2)
+library(AAGIThemes)
+
+ggplot(pressure) + 
+  geom_point(aes(x = temperature, y = pressure)) +
+  theme_aagi()
+```
+
+Use \texttt{kable} for producing tables. For convenience, you can use the
+`aagi_table()` wrapper function to quickly give your table a basic 
+AAGI theme and header colour, but feel free to modify to your taste:
+
+```{r mytable}
+#| echo=TRUE
+aagi_table(head(iris, 4), caption = "My table")
+```
+
+
+\vspace*{1cm}
+
+In this introduction section, outline the goals of the research project and
+any necessary background to provide contexts and rationale for the
+research/work.
+
+## This is a subsection
+
+Use subsections (and subsubsections) as much as you like to help structure
+your content.
+
+### This is a subsubsection
+
+
+\clearpage
+# Trial design
+
+Include the trial layout, type, and the experimental design, such as treatments,
+number of replicates, blocking, etc. Include graphics and pictures where useful.
+
+Make sure to include notes about any specific considerations that must be kept
+in mind for the type of trial (e.g., small plots, glasshouse experiments,
+genetics, breeding trials, OFE projects, bioinformatics projects, and so on).
+
+
+\clearpage
+# Exploratory data analysis
+
+You can use a dedicated section here for the preliminary data exploration and
+dataset visualisation. This can be useful to aid in the interpretation of the
+data and graphs generated throughout the work, as well as for providing a
+rationale for the statistical methodologies used.
+
+
+\clearpage
+# Methods
+
+Use this section to include a detailed description of the procedures and
+methodologies used for the analysis. Include versions/commits on developed
+pipelines, code scripts, and input/output details as relevant.
+
+Detail also the approach taken for the data analysis work here (or in a
+separate section).
+
+
+\clearpage
+# Results and discussion
+
+Include all of the results of the analytical work, and discuss the findings
+and their implications with respect to the research question.
+
+
+\clearpage
+# Datasets and metadata
+
+(Optional) Where useful, include descriptions of the datasets relevant to
+this research, including links and DOIs to enable findability of these datasets.
+(Often for GRDC projects these will have associated metadata entries in the GRDC
+Data Catalogue, which can be linked where appropriate.)
+
+Where you have publicly available code on GitHub associated with the analytics
+(e.g., pipelines), you can include git commit numbers and tags. Including
+md5/sha256 checksums for input data and outputs is also useful for
+research reproducibility.
+
+
+\clearpage
+# Trial location maps
+
+(Optional) Include if relevant to the project.
+
+
+\clearpage
+\appendix
+
+\clearpage
+# This is an appendix
+
+Include Appendices at the end of the report as necessary, to contain any
+additional supporting information of interest.
+
+## This is an appendix subsection
+
+
+\clearpage
+# This is another appendix
+
+And so on. Include as many appendices as you like.
+
+
+\clearpage
+\phantomsection
+\pagestyle{bibliography}
+# References {-}
